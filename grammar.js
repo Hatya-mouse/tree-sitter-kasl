@@ -48,13 +48,14 @@ export default grammar({
 
         import_stmt: ($) => seq("import", $.identifier),
 
-        typealias_stmt: ($) => seq("typealias", $.identifier, "=", $.type_name),
+        typealias_stmt: ($) =>
+            seq("typealias", field("name", $.identifier), "=", $.type_name),
 
         func_decl_stmt: ($) =>
             seq(
                 optional("static"),
                 "func",
-                $.identifier,
+                field("name", $.identifier),
                 "(",
                 seq($.func_param, repeat(seq(",", $.func_param))),
                 optional(","),
@@ -66,13 +67,11 @@ export default grammar({
                 "}",
             ),
 
-        return_stmt: ($) => seq("return", $.expr),
-
         input_stmt: ($) =>
             seq(
                 repeat($.input_attr),
                 "input",
-                $.identifier,
+                field("name", $.identifier),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -81,7 +80,7 @@ export default grammar({
         output_stmt: ($) =>
             seq(
                 "output",
-                $.identifier,
+                field("name", $.identifier),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -90,7 +89,7 @@ export default grammar({
         state_var_stmt: ($) =>
             seq(
                 "state",
-                $.identifier,
+                field("name", $.identifier),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -99,7 +98,7 @@ export default grammar({
         global_let_stmt: ($) =>
             seq(
                 "let",
-                $.identifier,
+                field("name", $.identifier),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -108,14 +107,20 @@ export default grammar({
         struct_field_stmt: ($) =>
             seq(
                 "var",
-                $.identifier,
+                field("name", $.identifier),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
             ),
 
         struct_decl_stmt: ($) =>
-            seq("struct", $.identifier, "{", repeat($.decl_stmt), "}"),
+            seq(
+                "struct",
+                field("name", $.identifier),
+                "{",
+                repeat($.decl_stmt),
+                "}",
+            ),
 
         // --- PARSER SCOPE STMTS ---
 
@@ -136,7 +141,10 @@ export default grammar({
                 "=",
                 $.expr,
             ),
+
         assign_stmt: ($) => seq($.expr, "=", $.expr),
+
+        return_stmt: ($) => seq("return", $.expr),
 
         if_stmt: ($) =>
             seq(

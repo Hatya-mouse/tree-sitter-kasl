@@ -1,8 +1,8 @@
 ; Keywords
 [
-  "import" "func" "let" "var" "state" "input" "output"
-  "return" "if" "else" "loop" "struct" "typealias"
-  "operator" "infix" "prefix" "static"
+    "import" "func" "let" "var" "state" "input" "output"
+    "return" "if" "else" "loop" "struct" "typealias"
+    "operator" "infix" "prefix" "static"
 ] @keyword
 
 ; Types
