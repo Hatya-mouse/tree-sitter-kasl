@@ -307,7 +307,7 @@ export default grammar({
 
         operator: ($) => /[+\-*/%^<>=!?|&@~]+/,
 
-        import_path: ($) => repeat(seq($.identifier, "/")),
+        import_path: ($) => seq($.identifier, repeat(seq("/", $.identifier))),
 
         integer: ($) => /[0-9]+/,
 
