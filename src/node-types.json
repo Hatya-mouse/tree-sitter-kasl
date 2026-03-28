@@ -251,11 +251,11 @@
       }
     },
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
         {
-          "type": "func_call_args",
+          "type": "func_call_arg",
           "named": true
         }
       ]
@@ -281,22 +281,7 @@
       "required": true,
       "types": [
         {
-          "type": "expr",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "func_call_args",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "func_call_arg",
+          "type": "multiline_expr",
           "named": true
         }
       ]
@@ -708,6 +693,21 @@
     }
   },
   {
+    "type": "multiline_expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expr_token",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "operator_def_stmt",
     "named": true,
     "fields": {},
@@ -824,11 +824,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "expr_token",
+          "type": "multiline_expr",
           "named": true
         }
       ]

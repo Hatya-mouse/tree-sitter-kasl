@@ -125,7 +125,8 @@ export default grammar({
                 "struct",
                 field("type_name", $.identifier),
                 "{",
-                repeat($.decl_stmt),
+                /\n*/,
+                repeat(seq($.decl_stmt, /\n+/)),
                 "}",
             ),
 
@@ -291,45 +292,15 @@ export default grammar({
                 ),
             ),
 
-        func_call_arg: ($) =>
-            prec(
-                1,
-                seq(
-                    optional(
-                        seq(
-                            field("func_arg_label", $.identifier),
-                            /\n*/,
-                            ":",
-                            /\n*/,
-                        ),
-                    ),
-                    $.expr,
-                ),
-            ),
-
-        func_call_args: ($) =>
-            seq(
-                "(",
-                /\n*/,
-                optional(
-                    seq(
-                        $.func_call_arg,
-                        /\n*/,
-                        repeat(seq(",", /\n*/, $.func_call_arg, /\n*/)),
-                    ),
-                ),
-                optional(","),
-                /\n*/,
-                ")",
-            ),
-
         // --- EXPRESSIONS ---
 
-        expr: ($) => prec.left(repeat1(seq($.expr_token, optional(/[ \t]*/)))),
+        expr: ($) => prec.left(repeat1($.expr_token)),
+
+        multiline_expr: ($) => prec.left(repeat1(seq($.expr_token, /\n*/))),
 
         expr_token: ($) =>
             choice(
-                prec(2, $.func_call),
+                $.func_call,
                 $.operator_token,
                 $.literal,
                 $.identifier_token,
@@ -340,7 +311,7 @@ export default grammar({
 
         bracket_content_token: ($) =>
             choice(
-                prec(2, $.func_call),
+                $.func_call,
                 $.operator_token,
                 $.literal,
                 $.identifier_token,
@@ -355,15 +326,51 @@ export default grammar({
 
         literal: ($) => choice($.decimal, $.integer, $.boolean),
 
+        // func_call: ($) =>
+        //     prec(
+        //         1,
+        //         seq(
+        //             field("func_name", $.identifier),
+        //             "(",
+        //             /\n*/,
+        //             optional($.func_call_args),
+        //             ")",
+        //         ),
+        //     ),
+
+        func_call_arg: ($) =>
+            choice(
+                seq(
+                    field("func_arg_label", $.identifier),
+                    ":",
+                    $.multiline_expr,
+                ),
+                $.multiline_expr,
+            ),
+
         func_call: ($) =>
-            prec(1, seq(field("func_name", $.identifier), $.func_call_args)),
+            prec(
+                1,
+                seq(
+                    field("func_name", $.identifier),
+                    "(",
+                    /\n*/,
+                    optional(
+                        seq(
+                            $.func_call_arg,
+                            repeat(seq(",", /\n*/, $.func_call_arg)),
+                        ),
+                    ),
+                    optional(","),
+                    ")",
+                ),
+            ),
 
         identifier_token: ($) => field("var_name", $.identifier),
 
         operator_token: ($) => $.operator,
 
-        parenthesized_token: ($) =>
-            seq("(", repeat1(seq($.expr_token, optional(/\n*/))), ")"),
+        parenthesized_token: ($) => seq("(", /\n*/, $.multiline_expr, ")"),
 
         bracketed_token: ($) =>
             seq(

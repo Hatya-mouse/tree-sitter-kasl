@@ -575,10 +575,23 @@
           "value": "{"
         },
         {
+          "type": "PATTERN",
+          "value": "\\n*"
+        },
+        {
           "type": "REPEAT",
           "content": {
-            "type": "SYMBOL",
-            "name": "decl_stmt"
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "decl_stmt"
+              },
+              {
+                "type": "PATTERN",
+                "value": "\\n+"
+              }
+            ]
           }
         },
         {
@@ -1528,131 +1541,18 @@
         }
       ]
     },
-    "func_call_arg": {
-      "type": "PREC",
-      "value": 1,
+    "expr": {
+      "type": "PREC_LEFT",
+      "value": 0,
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "FIELD",
-                    "name": "func_arg_label",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "identifier"
-                    }
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "\\n*"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": ":"
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "\\n*"
-                  }
-                ]
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "SYMBOL",
-            "name": "expr"
-          }
-        ]
+        "type": "REPEAT1",
+        "content": {
+          "type": "SYMBOL",
+          "name": "expr_token"
+        }
       }
     },
-    "func_call_args": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "PATTERN",
-          "value": "\\n*"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "func_call_arg"
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "\\n*"
-                },
-                {
-                  "type": "REPEAT",
-                  "content": {
-                    "type": "SEQ",
-                    "members": [
-                      {
-                        "type": "STRING",
-                        "value": ","
-                      },
-                      {
-                        "type": "PATTERN",
-                        "value": "\\n*"
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "func_call_arg"
-                      },
-                      {
-                        "type": "PATTERN",
-                        "value": "\\n*"
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": ","
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "PATTERN",
-          "value": "\\n*"
-        },
-        {
-          "type": "STRING",
-          "value": ")"
-        }
-      ]
-    },
-    "expr": {
+    "multiline_expr": {
       "type": "PREC_LEFT",
       "value": 0,
       "content": {
@@ -1665,16 +1565,8 @@
               "name": "expr_token"
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "PATTERN",
-                  "value": "[ \\t]*"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "PATTERN",
+              "value": "\\n*"
             }
           ]
         }
@@ -1684,12 +1576,8 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PREC",
-          "value": 2,
-          "content": {
-            "type": "SYMBOL",
-            "name": "func_call"
-          }
+          "type": "SYMBOL",
+          "name": "func_call"
         },
         {
           "type": "SYMBOL",
@@ -1721,12 +1609,8 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "PREC",
-          "value": 2,
-          "content": {
-            "type": "SYMBOL",
-            "name": "func_call"
-          }
+          "type": "SYMBOL",
+          "name": "func_call"
         },
         {
           "type": "SYMBOL",
@@ -1779,6 +1663,36 @@
         }
       ]
     },
+    "func_call_arg": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "func_arg_label",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ":"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "multiline_expr"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "multiline_expr"
+        }
+      ]
+    },
     "func_call": {
       "type": "PREC",
       "value": 1,
@@ -1794,8 +1708,65 @@
             }
           },
           {
-            "type": "SYMBOL",
-            "name": "func_call_args"
+            "type": "STRING",
+            "value": "("
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\n*"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "func_call_arg"
+                  },
+                  {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": ","
+                        },
+                        {
+                          "type": "PATTERN",
+                          "value": "\\n*"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "func_call_arg"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": ")"
           }
         ]
       }
@@ -1820,28 +1791,12 @@
           "value": "("
         },
         {
-          "type": "REPEAT1",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "expr_token"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "PATTERN",
-                    "value": "\\n*"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              }
-            ]
-          }
+          "type": "PATTERN",
+          "value": "\\n*"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "multiline_expr"
         },
         {
           "type": "STRING",

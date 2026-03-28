@@ -46,6 +46,8 @@ state write_pos = 0
 state delay_buffer = [0.0; 2048]
 state is_playing = false
 
+input mao = false
+
 func sine(freq: Float, phase: Float) -> Float {
     return std.float.sin(pi2 * freq * phase)
 }
