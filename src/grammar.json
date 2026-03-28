@@ -12,16 +12,8 @@
             "name": "decl_stmt"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "\\n+"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "PATTERN",
+            "value": "\\n+"
           }
         ]
       }
@@ -36,16 +28,8 @@
             "name": "scope_stmt"
           },
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "\\n+"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
+            "type": "PATTERN",
+            "value": "\\n+"
           }
         ]
       }

@@ -13,11 +13,11 @@ export default grammar({
     extras: ($) => [/[ \t\r]/, $.comment],
 
     rules: {
-        source_file: ($) => repeat(seq($.decl_stmt, optional(/\n+/))),
+        source_file: ($) => repeat(seq($.decl_stmt, /\n+/)),
 
         // --- STATEMENTS ---
 
-        scope_stmts: ($) => repeat1(seq($.scope_stmt, optional(/\n+/))),
+        scope_stmts: ($) => repeat1(seq($.scope_stmt, /\n+/)),
 
         decl_stmt: ($) =>
             choice(
