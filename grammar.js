@@ -10,14 +10,14 @@
 export default grammar({
     name: "kasl",
 
-    extras: ($) => [/\s/, $.comment],
+    extras: ($) => [/[ \t\r]/, $.comment],
 
     rules: {
-        source_file: ($) => repeat($.decl_stmt),
+        source_file: ($) => repeat(seq($.decl_stmt, optional(/\n+/))),
 
         // --- STATEMENTS ---
 
-        scope_stmts: ($) => repeat1($.scope_stmt),
+        scope_stmts: ($) => repeat1(seq($.scope_stmt, optional(/\n+/))),
 
         decl_stmt: ($) =>
             choice(
@@ -155,7 +155,7 @@ export default grammar({
 
         if_arm: ($) => seq("if", $.expr, "{", optional($.scope_stmts), "}"),
 
-        expr_stmt: ($) => $.expr,
+        expr_stmt: ($) => seq($.expr, /\n+/),
 
         loop_stmt: ($) =>
             seq("loop", $.expr, "{", optional($.scope_stmts), "}"),
@@ -243,9 +243,7 @@ export default grammar({
 
         // --- EXPRESSIONS ---
 
-        expr: ($) => prec.left(repeat1($.expr_token)),
-
-        bracket_content: ($) => repeat1($.bracket_content_token),
+        expr: ($) => prec.left(repeat1(seq($.expr_token, optional(/[ \t]*/)))),
 
         expr_token: ($) =>
             choice(
@@ -281,9 +279,15 @@ export default grammar({
 
         operator_token: ($) => $.operator,
 
-        parenthesized_token: ($) => seq("(", $.expr, ")"),
+        parenthesized_token: ($) =>
+            seq("(", repeat1(seq($.expr_token, optional(/\n+/))), ")"),
 
-        bracketed_token: ($) => seq("[", $.bracket_content, "]"),
+        bracketed_token: ($) =>
+            seq(
+                "[",
+                repeat1(seq($.bracket_content_token, optional(/\n+/))),
+                "]",
+            ),
 
         dot_token: ($) => ".",
 
