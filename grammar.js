@@ -49,13 +49,13 @@ export default grammar({
         import_stmt: ($) => seq("import", $.import_path),
 
         typealias_stmt: ($) =>
-            seq("typealias", field("name", $.identifier), "=", $.type_name),
+            seq("typealias", field("name", $.var_name), "=", $.type_name),
 
         func_decl_stmt: ($) =>
             seq(
                 optional("static"),
                 "func",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 "(",
                 seq(
                     optional(seq($.func_param, repeat(seq(",", $.func_param)))),
@@ -73,7 +73,7 @@ export default grammar({
             seq(
                 repeat($.input_attr),
                 "input",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -82,7 +82,7 @@ export default grammar({
         output_stmt: ($) =>
             seq(
                 "output",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -91,7 +91,7 @@ export default grammar({
         state_var_stmt: ($) =>
             seq(
                 "state",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -100,7 +100,7 @@ export default grammar({
         global_let_stmt: ($) =>
             seq(
                 "let",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -109,7 +109,7 @@ export default grammar({
         struct_field_stmt: ($) =>
             seq(
                 "var",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -118,7 +118,7 @@ export default grammar({
         struct_decl_stmt: ($) =>
             seq(
                 "struct",
-                field("name", $.identifier),
+                field("name", $.var_name),
                 "{",
                 repeat($.decl_stmt),
                 "}",
@@ -129,7 +129,7 @@ export default grammar({
         local_var_stmt: ($) =>
             seq(
                 "var",
-                $.identifier,
+                $.var_name,
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -138,7 +138,7 @@ export default grammar({
         local_let_stmt: ($) =>
             seq(
                 "let",
-                $.identifier,
+                $.var_name,
                 optional(seq(":", $.type_name)),
                 "=",
                 $.expr,
@@ -266,8 +266,8 @@ export default grammar({
 
         func_param: ($) =>
             seq(
-                optional($.identifier),
-                $.identifier,
+                optional($.func_arg_label),
+                $.func_arg_name,
                 optional(seq(":", $.type_name)),
                 optional(seq("=", $.expr)),
             ),
@@ -275,7 +275,7 @@ export default grammar({
         input_attr: ($) =>
             seq(
                 "#",
-                $.identifier,
+                $.input_attr_name,
                 optional(
                     seq(
                         "(",
@@ -286,7 +286,7 @@ export default grammar({
                 ),
             ),
 
-        func_call_arg: ($) => seq(optional(seq($.identifier, ":")), $.expr),
+        func_call_arg: ($) => seq(optional(seq($.func_arg_label, ":")), $.expr),
 
         func_call_args: ($) =>
             seq(
@@ -332,7 +332,7 @@ export default grammar({
 
         func_call: ($) => prec(1, seq($.identifier, $.func_call_args)),
 
-        identifier_token: ($) => $.identifier,
+        identifier_token: ($) => $.var_name,
 
         operator_token: ($) => $.operator,
 
@@ -362,9 +362,17 @@ export default grammar({
                 seq("[", $.type_name, ";", $.integer, "]"),
             ),
 
-        operator: ($) => /[+\-*/%^<>=!?|&@~]+/,
+        var_name: ($) => $.identifier,
+
+        func_arg_label: ($) => $.identifier,
+
+        func_arg_name: ($) => $.identifier,
+
+        input_attr_name: ($) => $.identifier,
 
         import_path: ($) => seq($.identifier, repeat(seq("/", $.identifier))),
+
+        operator: ($) => /[+\-*/%^<>=!?|&@~]+/,
 
         integer: ($) => /[0-9]+/,
 
