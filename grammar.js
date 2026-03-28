@@ -17,7 +17,7 @@ export default grammar({
 
         // --- STATEMENTS ---
 
-        scope_stmts: ($) => repeat1(seq($.scope_stmt, /\n+/)),
+        scope_stmts: ($) => seq(/n*/, repeat1(seq($.scope_stmt, /\n+/))),
 
         decl_stmt: ($) =>
             choice(
