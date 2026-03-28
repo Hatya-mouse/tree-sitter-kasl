@@ -429,6 +429,21 @@
     }
   },
   {
+    "type": "import_path",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "import_stmt",
     "named": true,
     "fields": {},
@@ -437,7 +452,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "import_path",
           "named": true
         }
       ]
@@ -1013,6 +1028,10 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "/",
     "named": false
   },
   {
