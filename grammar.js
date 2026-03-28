@@ -293,17 +293,30 @@ export default grammar({
 
         func_call_arg: ($) =>
             seq(
-                optional(seq(field("func_arg_label", $.identifier), ":")),
+                optional(
+                    seq(
+                        field("func_arg_label", $.identifier),
+                        /\n*/,
+                        ":",
+                        /\n*/,
+                    ),
+                ),
                 $.expr,
             ),
 
         func_call_args: ($) =>
             seq(
                 "(",
+                /\n*/,
                 optional(
-                    seq($.func_call_arg, repeat(seq(",", $.func_call_arg))),
+                    seq(
+                        $.func_call_arg,
+                        /\n*/,
+                        repeat(seq(",", /\n*/, $.func_call_arg, /\n*/)),
+                    ),
                 ),
                 optional(","),
+                /\n*/,
                 ")",
             ),
 
@@ -313,9 +326,9 @@ export default grammar({
 
         expr_token: ($) =>
             choice(
+                prec(2, $.func_call),
                 $.operator_token,
                 $.literal,
-                $.func_call,
                 $.identifier_token,
                 $.parenthesized_token,
                 $.dot_token,
@@ -324,9 +337,9 @@ export default grammar({
 
         bracket_content_token: ($) =>
             choice(
+                prec(2, $.func_call),
                 $.operator_token,
                 $.literal,
-                $.func_call,
                 $.identifier_token,
                 $.parenthesized_token,
                 $.dot_token,
@@ -340,7 +353,7 @@ export default grammar({
         literal: ($) => choice($.decimal, $.integer, $.boolean),
 
         func_call: ($) =>
-            prec(1, seq(field("func_name", $.identifier), $.func_call_args)),
+            seq(field("func_name", $.identifier), $.func_call_args),
 
         identifier_token: ($) => field("var_name", $.identifier),
 
