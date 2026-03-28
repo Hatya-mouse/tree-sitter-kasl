@@ -1,0 +1,40 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "kasl",
+      "camelcase": "Kasl",
+      "title": "KASL",
+      "scope": "source.kasl",
+      "file-types": ["kasl"],
+      "injection-regex": "^kasl$",
+      "class-name": "TreeSitterKasl",
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "Apache-2.0",
+    "description": "A simple, and minimal audio processing language.",
+    "authors": [
+      {
+        "name": "Shuntaro Kasatani",
+        "email": "shuntar30@gmail.com",
+        "url": "https://hatya.dev"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/hatya-mouse/tree-sitter-kasl"
+    }
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "java": false,
+    "node": true,
+    "python": false,
+    "rust": true,
+    "swift": false,
+    "zig": false
+  }
+}
