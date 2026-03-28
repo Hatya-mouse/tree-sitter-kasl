@@ -19,3 +19,9 @@
 
 ; Identifiers
 (identifier) @variable
+
+; Operators
+(operator) @operator
+
+; Comments
+(comment) @comment

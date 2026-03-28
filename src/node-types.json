@@ -67,7 +67,7 @@
           "named": true
         },
         {
-          "type": "comma",
+          "type": "comma_token",
           "named": true
         },
         {
@@ -117,7 +117,7 @@
     }
   },
   {
-    "type": "comma",
+    "type": "comma_token",
     "named": true,
     "fields": {}
   },
@@ -464,6 +464,25 @@
     }
   },
   {
+    "type": "input_attr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expr",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "input_stmt",
     "named": true,
     "fields": {},
@@ -477,6 +496,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "input_attr",
           "named": true
         },
         {
@@ -928,6 +951,10 @@
     }
   },
   {
+    "type": "#",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -970,6 +997,11 @@
   {
     "type": "associativity",
     "named": false
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "extra": true
   },
   {
     "type": "decimal",

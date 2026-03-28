@@ -10,6 +10,8 @@
 export default grammar({
     name: "kasl",
 
+    extras: ($) => [/\s/, $.comment],
+
     rules: {
         source_file: ($) => repeat($.decl_stmt),
 
@@ -68,6 +70,7 @@ export default grammar({
 
         input_stmt: ($) =>
             seq(
+                repeat($.input_attr),
                 "input",
                 $.identifier,
                 optional(seq(":", $.type_name)),
@@ -257,7 +260,7 @@ export default grammar({
                 $.dot_token,
                 $.bracketed_token,
                 $.semi_colon,
-                $.comma,
+                $.comma_token,
             ),
 
         // --- TOKENS ---
@@ -278,7 +281,7 @@ export default grammar({
 
         semi_colon: ($) => ";",
 
-        comma: ($) => ",",
+        comma_token: ($) => ",",
 
         // --- MISCELLANEOUS ---
 
@@ -299,5 +302,7 @@ export default grammar({
         decimal: ($) => /[0-9]+\.[0-9]+/,
 
         boolean: ($) => choice("true", "false"),
+
+        comment: ($) => /\/\/.*/,
     },
 });
