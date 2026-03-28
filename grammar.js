@@ -57,11 +57,12 @@ export default grammar({
                 "func",
                 field("name", $.identifier),
                 "(",
-                seq($.func_param, repeat(seq(",", $.func_param))),
-                optional(","),
+                seq(
+                    optional(seq($.func_param, repeat(seq(",", $.func_param)))),
+                    optional(","),
+                ),
                 ")",
-                "->",
-                $.type_name,
+                optional(seq("->", $.type_name)),
                 "{",
                 optional($.scope_stmts),
                 "}",
@@ -142,7 +143,7 @@ export default grammar({
                 $.expr,
             ),
 
-        assign_stmt: ($) => seq($.expr, "=", $.expr),
+        assign_stmt: ($) => prec(1, seq($.expr, "=", $.expr)),
 
         return_stmt: ($) => seq("return", $.expr),
 
@@ -195,11 +196,12 @@ export default grammar({
                 choice("infix", "prefix", "postfix"),
                 $.operator,
                 "(",
-                seq($.func_param, repeat(seq(",", $.func_param))),
-                optional(","),
+                seq(
+                    optional(seq($.func_param, repeat(seq(",", $.func_param)))),
+                    optional(","),
+                ),
                 ")",
-                "->",
-                $.type_name,
+                optional(seq("->", $.type_name)),
                 "{",
                 optional($.scope_stmts),
                 "}",
@@ -280,12 +282,12 @@ export default grammar({
         operator_token: ($) => $.operator,
 
         parenthesized_token: ($) =>
-            seq("(", repeat1(seq($.expr_token, optional(/\n+/))), ")"),
+            seq("(", repeat1(seq($.expr_token, optional(/\n*/))), ")"),
 
         bracketed_token: ($) =>
             seq(
                 "[",
-                repeat1(seq($.bracket_content_token, optional(/\n+/))),
+                repeat1(seq($.bracket_content_token, optional(/\n*/))),
                 "]",
             ),
 
