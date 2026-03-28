@@ -8,8 +8,7 @@
       "scope": "source.kasl",
       "file-types": ["kasl"],
       "injection-regex": "^kasl$",
-      "class-name": "TreeSitterKasl",
-      "highlights": "queries/highlights.scm"
+      "class-name": "TreeSitterKasl"
     }
   ],
   "metadata": {
