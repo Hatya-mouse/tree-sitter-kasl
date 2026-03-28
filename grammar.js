@@ -17,7 +17,7 @@ export default grammar({
 
         // --- STATEMENTS ---
 
-        scope_stmts: ($) => seq(/n*/, repeat1(seq($.scope_stmt, /\n+/))),
+        scope_stmts: ($) => repeat1(seq($.scope_stmt, /\n+/)),
 
         decl_stmt: ($) =>
             choice(
@@ -64,6 +64,7 @@ export default grammar({
                 ")",
                 optional(seq("->", $.type_name)),
                 "{",
+                /\n*/,
                 optional($.scope_stmts),
                 "}",
             ),
@@ -150,18 +151,28 @@ export default grammar({
         if_stmt: ($) =>
             seq(
                 $.if_arm,
-                optional(seq("else", $.if_arm)),
-                optional(seq("else", "{", optional($.scope_stmts), "}")),
+                optional(seq("else", /\n*/, $.if_arm)),
+                optional(
+                    seq(
+                        "else",
+                        /\n*/,
+                        "{",
+                        /\n*/,
+                        optional($.scope_stmts),
+                        "}",
+                    ),
+                ),
             ),
 
-        if_arm: ($) => seq("if", $.expr, "{", optional($.scope_stmts), "}"),
+        if_arm: ($) =>
+            seq("if", $.expr, "{", /\n*/, optional($.scope_stmts), "}"),
 
         expr_stmt: ($) => seq($.expr, /\n+/),
 
         loop_stmt: ($) =>
-            seq("loop", $.expr, "{", optional($.scope_stmts), "}"),
+            seq("loop", $.expr, "{", /\n*/, optional($.scope_stmts), "}"),
 
-        block_stmt: ($) => seq("{", optional($.scope_stmts), "}"),
+        block_stmt: ($) => seq("{", /\n*/, optional($.scope_stmts), "}"),
 
         // --- OPERATOR PROPERTIES ---
 
@@ -172,21 +183,64 @@ export default grammar({
 
         infix_props: ($) =>
             choice(
-                seq($.prec_prop, ",", $.assoc_prop, optional(",")),
-                seq($.assoc_prop, ",", $.prec_prop, optional(",")),
+                seq(
+                    $.prec_prop,
+                    /\n*/,
+                    ",",
+                    /\n*/,
+                    $.assoc_prop,
+                    /\n*/,
+                    optional(","),
+                    /\n*/,
+                ),
+                seq(
+                    $.assoc_prop,
+                    /\n*/,
+                    ",",
+                    /\n*/,
+                    $.prec_prop,
+                    /\n*/,
+                    optional(","),
+                    /\n*/,
+                ),
             ),
 
-        prefix_props: ($) => seq($.prec_prop, optional(",")),
+        prefix_props: ($) => seq($.prec_prop, /\n*/, optional(","), /\n*/),
 
-        postfix_props: ($) => seq($.prec_prop, optional(",")),
+        postfix_props: ($) => seq($.prec_prop, /\n*/, optional(","), /\n*/),
 
         operator_def_stmt: ($) =>
             seq(
                 "operator",
                 choice(
-                    seq("infix", $.operator, "{", $.infix_props, "}"),
-                    seq("prefix", $.operator, "{", $.prefix_props, "}"),
-                    seq("postfix", $.operator, "{", $.postfix_props, "}"),
+                    seq(
+                        "infix",
+                        /\n*/,
+                        $.operator,
+                        /\n*/,
+                        "{",
+                        /\n*/,
+                        $.infix_props,
+                        "}",
+                    ),
+                    seq(
+                        "prefix",
+                        /\n*/,
+                        $.operator,
+                        /\n*/,
+                        "{",
+                        /\n*/,
+                        $.prefix_props,
+                        "}",
+                    ),
+                    seq(
+                        "postfix",
+                        $.operator,
+                        "{",
+                        /\n*/,
+                        $.postfix_props,
+                        "}",
+                    ),
                 ),
             ),
 
@@ -203,6 +257,7 @@ export default grammar({
                 ")",
                 optional(seq("->", $.type_name)),
                 "{",
+                /\n*/,
                 optional($.scope_stmts),
                 "}",
             ),
@@ -317,6 +372,6 @@ export default grammar({
 
         boolean: ($) => choice("true", "false"),
 
-        comment: ($) => /\/\/.*/,
+        comment: ($) => /\/\/.*\n/,
     },
 });

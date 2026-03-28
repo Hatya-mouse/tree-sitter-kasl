@@ -269,6 +269,10 @@
           "value": "{"
         },
         {
+          "type": "PATTERN",
+          "value": "\\n*"
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -691,6 +695,10 @@
                   "value": "else"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "SYMBOL",
                   "name": "if_arm"
                 }
@@ -712,8 +720,16 @@
                   "value": "else"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "STRING",
                   "value": "{"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\n*"
                 },
                 {
                   "type": "CHOICE",
@@ -754,6 +770,10 @@
         {
           "type": "STRING",
           "value": "{"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "CHOICE",
@@ -802,6 +822,10 @@
           "value": "{"
         },
         {
+          "type": "PATTERN",
+          "value": "\\n*"
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -825,6 +849,10 @@
         {
           "type": "STRING",
           "value": "{"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "CHOICE",
@@ -902,12 +930,24 @@
               "name": "prec_prop"
             },
             {
+              "type": "PATTERN",
+              "value": "\\n*"
+            },
+            {
               "type": "STRING",
               "value": ","
             },
             {
+              "type": "PATTERN",
+              "value": "\\n*"
+            },
+            {
               "type": "SYMBOL",
               "name": "assoc_prop"
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\n*"
             },
             {
               "type": "CHOICE",
@@ -920,6 +960,10 @@
                   "type": "BLANK"
                 }
               ]
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\n*"
             }
           ]
         },
@@ -931,12 +975,24 @@
               "name": "assoc_prop"
             },
             {
+              "type": "PATTERN",
+              "value": "\\n*"
+            },
+            {
               "type": "STRING",
               "value": ","
             },
             {
+              "type": "PATTERN",
+              "value": "\\n*"
+            },
+            {
               "type": "SYMBOL",
               "name": "prec_prop"
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\n*"
             },
             {
               "type": "CHOICE",
@@ -949,6 +1005,10 @@
                   "type": "BLANK"
                 }
               ]
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\n*"
             }
           ]
         }
@@ -962,25 +1022,8 @@
           "name": "prec_prop"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": ","
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        }
-      ]
-    },
-    "postfix_props": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "prec_prop"
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "CHOICE",
@@ -993,6 +1036,39 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
+        }
+      ]
+    },
+    "postfix_props": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "prec_prop"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ","
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         }
       ]
     },
@@ -1014,12 +1090,24 @@
                   "value": "infix"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "SYMBOL",
                   "name": "operator"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "STRING",
                   "value": "{"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\n*"
                 },
                 {
                   "type": "SYMBOL",
@@ -1039,12 +1127,24 @@
                   "value": "prefix"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "SYMBOL",
                   "name": "operator"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "STRING",
                   "value": "{"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\n*"
                 },
                 {
                   "type": "SYMBOL",
@@ -1070,6 +1170,10 @@
                 {
                   "type": "STRING",
                   "value": "{"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "\\n*"
                 },
                 {
                   "type": "SYMBOL",
@@ -1195,6 +1299,10 @@
         {
           "type": "STRING",
           "value": "{"
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "CHOICE",
@@ -1785,7 +1893,7 @@
     },
     "comment": {
       "type": "PATTERN",
-      "value": "\\/\\/.*"
+      "value": "\\/\\/.*\\n"
     }
   },
   "extras": [
