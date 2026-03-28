@@ -46,23 +46,28 @@ export default grammar({
                 $.expr_stmt,
             ),
 
-        import_stmt: ($) => seq("import", $.import_path),
+        import_stmt: ($) => seq("import", field("input_name", $.import_path)),
 
         typealias_stmt: ($) =>
-            seq("typealias", field("name", $.var_name), "=", $.type_name),
+            seq(
+                "typealias",
+                field("type_name", $.identifier),
+                "=",
+                field("type_name", $.type_name),
+            ),
 
         func_decl_stmt: ($) =>
             seq(
                 optional("static"),
                 "func",
-                field("name", $.var_name),
+                field("func_name", $.identifier),
                 "(",
                 seq(
                     optional(seq($.func_param, repeat(seq(",", $.func_param)))),
                     optional(","),
                 ),
                 ")",
-                optional(seq("->", $.type_name)),
+                optional(seq("->", field("type_name", $.type_name))),
                 "{",
                 /\n*/,
                 optional($.scope_stmts),
@@ -73,8 +78,8 @@ export default grammar({
             seq(
                 repeat($.input_attr),
                 "input",
-                field("name", $.var_name),
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -82,8 +87,8 @@ export default grammar({
         output_stmt: ($) =>
             seq(
                 "output",
-                field("name", $.var_name),
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -91,8 +96,8 @@ export default grammar({
         state_var_stmt: ($) =>
             seq(
                 "state",
-                field("name", $.var_name),
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -100,8 +105,8 @@ export default grammar({
         global_let_stmt: ($) =>
             seq(
                 "let",
-                field("name", $.var_name),
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -109,8 +114,8 @@ export default grammar({
         struct_field_stmt: ($) =>
             seq(
                 "var",
-                field("name", $.var_name),
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -118,7 +123,7 @@ export default grammar({
         struct_decl_stmt: ($) =>
             seq(
                 "struct",
-                field("name", $.var_name),
+                field("type_name", $.identifier),
                 "{",
                 repeat($.decl_stmt),
                 "}",
@@ -129,8 +134,8 @@ export default grammar({
         local_var_stmt: ($) =>
             seq(
                 "var",
-                $.var_name,
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -138,8 +143,8 @@ export default grammar({
         local_let_stmt: ($) =>
             seq(
                 "let",
-                $.var_name,
-                optional(seq(":", $.type_name)),
+                field("var_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 "=",
                 $.expr,
             ),
@@ -255,7 +260,7 @@ export default grammar({
                     optional(","),
                 ),
                 ")",
-                optional(seq("->", $.type_name)),
+                optional(seq("->", field("type_name", $.type_name))),
                 "{",
                 /\n*/,
                 optional($.scope_stmts),
@@ -266,16 +271,16 @@ export default grammar({
 
         func_param: ($) =>
             seq(
-                optional($.func_arg_label),
-                $.func_arg_name,
-                optional(seq(":", $.type_name)),
+                optional(field("func_arg_label", $.identifier)),
+                field("func_arg_name", $.identifier),
+                optional(seq(":", field("type_name", $.type_name))),
                 optional(seq("=", $.expr)),
             ),
 
         input_attr: ($) =>
             seq(
                 "#",
-                $.input_attr_name,
+                field("input_attr_name", $.identifier),
                 optional(
                     seq(
                         "(",
@@ -286,7 +291,11 @@ export default grammar({
                 ),
             ),
 
-        func_call_arg: ($) => seq(optional(seq($.func_arg_label, ":")), $.expr),
+        func_call_arg: ($) =>
+            seq(
+                optional(seq(field("func_arg_label", $.identifier), ":")),
+                $.expr,
+            ),
 
         func_call_args: ($) =>
             seq(
@@ -330,9 +339,10 @@ export default grammar({
 
         literal: ($) => choice($.decimal, $.integer, $.boolean),
 
-        func_call: ($) => prec(1, seq($.identifier, $.func_call_args)),
+        func_call: ($) =>
+            prec(1, seq(field("func_name", $.identifier), $.func_call_args)),
 
-        identifier_token: ($) => $.var_name,
+        identifier_token: ($) => field("var_name", $.identifier),
 
         operator_token: ($) => $.operator,
 
@@ -361,14 +371,6 @@ export default grammar({
                 seq($.identifier, repeat(seq(".", $.identifier))),
                 seq("[", $.type_name, ";", $.integer, "]"),
             ),
-
-        var_name: ($) => $.identifier,
-
-        func_arg_label: ($) => $.identifier,
-
-        func_arg_name: ($) => $.identifier,
-
-        input_attr_name: ($) => $.identifier,
 
         import_path: ($) => seq($.identifier, repeat(seq("/", $.identifier))),
 
