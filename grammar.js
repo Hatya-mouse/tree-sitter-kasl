@@ -46,7 +46,7 @@ export default grammar({
                 $.expr_stmt,
             ),
 
-        import_stmt: ($) => seq("import", $.identifier),
+        import_stmt: ($) => seq("import", $.import_path),
 
         typealias_stmt: ($) =>
             seq("typealias", field("name", $.identifier), "=", $.type_name),
