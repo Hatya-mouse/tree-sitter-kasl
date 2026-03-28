@@ -496,17 +496,16 @@
   {
     "type": "import_stmt",
     "named": true,
-    "fields": {
-      "input_name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "import_path",
-            "named": true
-          }
-        ]
-      }
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "import_path",
+          "named": true
+        }
+      ]
     }
   },
   {

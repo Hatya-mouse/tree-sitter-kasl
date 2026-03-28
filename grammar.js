@@ -292,16 +292,19 @@ export default grammar({
             ),
 
         func_call_arg: ($) =>
-            seq(
-                optional(
-                    seq(
-                        field("func_arg_label", $.identifier),
-                        /\n*/,
-                        ":",
-                        /\n*/,
+            prec(
+                1,
+                seq(
+                    optional(
+                        seq(
+                            field("func_arg_label", $.identifier),
+                            /\n*/,
+                            ":",
+                            /\n*/,
+                        ),
                     ),
+                    $.expr,
                 ),
-                $.expr,
             ),
 
         func_call_args: ($) =>
@@ -353,7 +356,7 @@ export default grammar({
         literal: ($) => choice($.decimal, $.integer, $.boolean),
 
         func_call: ($) =>
-            seq(field("func_name", $.identifier), $.func_call_args),
+            prec(1, seq(field("func_name", $.identifier), $.func_call_args)),
 
         identifier_token: ($) => field("var_name", $.identifier),
 

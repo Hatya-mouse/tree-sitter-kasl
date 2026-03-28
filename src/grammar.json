@@ -128,12 +128,8 @@
           "value": "import"
         },
         {
-          "type": "FIELD",
-          "name": "input_name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "import_path"
-          }
+          "type": "SYMBOL",
+          "name": "import_path"
         }
       ]
     },
@@ -1533,38 +1529,50 @@
       ]
     },
     "func_call_arg": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "FIELD",
-                  "name": "func_arg_label",
-                  "content": {
-                    "type": "SYMBOL",
-                    "name": "identifier"
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "func_arg_label",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "identifier"
+                    }
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "\\n*"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": ":"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "\\n*"
                   }
-                },
-                {
-                  "type": "STRING",
-                  "value": ":"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expr"
-        }
-      ]
+                ]
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expr"
+          }
+        ]
+      }
     },
     "func_call_args": {
       "type": "SEQ",
@@ -1572,6 +1580,10 @@
         {
           "type": "STRING",
           "value": "("
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "CHOICE",
@@ -1584,6 +1596,10 @@
                   "name": "func_call_arg"
                 },
                 {
+                  "type": "PATTERN",
+                  "value": "\\n*"
+                },
+                {
                   "type": "REPEAT",
                   "content": {
                     "type": "SEQ",
@@ -1593,8 +1609,16 @@
                         "value": ","
                       },
                       {
+                        "type": "PATTERN",
+                        "value": "\\n*"
+                      },
+                      {
                         "type": "SYMBOL",
                         "name": "func_call_arg"
+                      },
+                      {
+                        "type": "PATTERN",
+                        "value": "\\n*"
                       }
                     ]
                   }
@@ -1617,6 +1641,10 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "PATTERN",
+          "value": "\\n*"
         },
         {
           "type": "STRING",
@@ -1656,16 +1684,20 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "PREC",
+          "value": 2,
+          "content": {
+            "type": "SYMBOL",
+            "name": "func_call"
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "operator_token"
         },
         {
           "type": "SYMBOL",
           "name": "literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "func_call"
         },
         {
           "type": "SYMBOL",
@@ -1689,16 +1721,20 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "PREC",
+          "value": 2,
+          "content": {
+            "type": "SYMBOL",
+            "name": "func_call"
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "operator_token"
         },
         {
           "type": "SYMBOL",
           "name": "literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "func_call"
         },
         {
           "type": "SYMBOL",
